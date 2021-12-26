@@ -1,9 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-import cairo
-from cairo import SVGSurface, Context, Matrix    
-
 def pltTree(root):
 
 	def dfs(_newnode, x,y, depth=1, retx = [], rety = []):
