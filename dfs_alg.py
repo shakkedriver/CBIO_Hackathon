@@ -5,7 +5,7 @@ from Node import Node
 
 def dfs_alg(root: Node, node: Node, twod_hist):
     """
-    this function gose over a tree in dfs order and counts for each couple of indexes in the vector how many times the
+    this function gose over a tree in dfs order and  counts for each couple of indexes in the vector how many times the
     indexes got zerod one after the other
     :param root: the root of the tree
     :return:
