@@ -47,7 +47,7 @@ def generateTree(dist, gens_vec):
 				 max(D[i][j], D[j][i]))
 			D[k][m] = 0
 		
-		newnode.weightleft = D[i][k]
+		newnode.weightleft 	= D[i][k]
 		newnode.weightright = D[j][k]
 		k += 1
 
@@ -66,6 +66,7 @@ def test():
 	
 	dist = np.random.random( (12,12) ) 
 	dist, gens_vec = matrixgen()
+	# dist, gens_vec = dist[, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
@@ -88,7 +89,10 @@ def test():
 			meanprob[i][j] = sum(prob[i][j]) /\
 				 len(prob[i][j]) if len(prob[i][j]) != 0 else 0
 	
-	print(meanprob)
+	import matplotlib.pyplot as plt
+	plt.imshow(meanprob)
+	plt.show()
+	# print(meanprob)
 
 	# print(prob)
 	# def dfs(_newnode, _str):

@@ -24,7 +24,7 @@ def trigger(node: Node):
 def dfs_limit_height(node: Node, height = HEIGHT ):
     if (node is None) or isleaf(node) or (height < 0):
         if node is not None:
-            print(height)
+            # print(height)
             return [ np.outer(node.gens, node.gens)  ]
         else:
             return []
