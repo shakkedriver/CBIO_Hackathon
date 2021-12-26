@@ -48,18 +48,12 @@ def generateTree(dist):
 				 max(D[j][m], D[m][j])  -\
 				 max(D[i][j], D[j][i]))
 			D[k][m] = 0
+		
+		newnode.weightleft = D[i][k]
+		newnode.weightleft = D[j][k]
 		k += 1
 
 	print(newnode)
-	
-	def dfs(_newnode, _str):
-		if _newnode is None:
-			return
-		dfs(_newnode.left, _str + " ")
-		print(_str + "hi")
-		dfs(_newnode.right, _str + " ")
-
-	dfs(newnode, "")
 	return newnode
 	
 
@@ -75,6 +69,19 @@ def test():
 	for i in range(n):
 		for j in range(i,n):
 			dist[j][i] = 0
-	generateTree(dist)
+	newnode = generateTree(dist)
+
+	from plots import pltTree
+	pltTree(newnode)
+	
+	def dfs(_newnode, _str):
+		if _newnode is None:
+			return
+		dfs(_newnode.left, _str + " ")
+		print(_str + "hi")
+		dfs(_newnode.right, _str + " ")
+		# print(Q_matrix)
+	dfs(newnode, "")
+
 if __name__ == "__main__":
 	test()
