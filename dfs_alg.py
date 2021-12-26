@@ -1,9 +1,9 @@
 import numpy as np
 
 from Node import Node, GENS
+from up_down import isleaf 
 
 HEIGHT = 2
-
 def _where(changed):
     ret = []
     for i in range(changed.shape[0]):
@@ -22,9 +22,9 @@ def trigger(node: Node):
         return _where(changed)
 
 def dfs_limit_height(node: Node, height = HEIGHT ):
-    if node is None or height < 0:
+    if (node is None) or isleaf(node) or (height < 0):
         if node is not None:
-            print("hhhi")
+            print(height)
             return [ np.outer(node.gens, node.gens)  ]
         else:
             return []
@@ -44,7 +44,7 @@ def dfs_estimate(node: Node, prob):
     if len(triggers) != 0:
         matrices = dfs_limit_height(node)
         for (i,j) in triggers:
-            tempij = 0    
+            tempij = np.float(0)    
             for matrix in matrices:
                 if matrix[i][j] == 0:
                     tempij += 1
