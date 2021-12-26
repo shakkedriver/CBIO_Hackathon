@@ -3,7 +3,7 @@ import numpy as np
 from Node import Node, GENS
 from up_down import isleaf 
 
-HEIGHT = 2
+HEIGHT = 5
 def _where(changed):
     ret = []
     for i in range(changed.shape[0]):
@@ -30,6 +30,8 @@ def dfs_limit_height(node: Node, height = HEIGHT ):
             return []
     else:
         ret = []
+        # print(node.weightleft)
+        # print(node.weightright)
         ret += dfs_limit_height(node.left, height-node.weightleft) 
         ret += dfs_limit_height(node.right, height-node.weightright)
         return ret

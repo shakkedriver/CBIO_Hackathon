@@ -13,11 +13,11 @@ def generateTree(dist, gens_vec):
 	
 	n = dist.shape[0]
 
-	D = np.zeros( (2*n,2*n) )	
+	D = np.zeros( (2*n,2*n) ).astype(np.float32)	
 	k = n
 
 	for i in range(n):
-		for j in range(n):
+		for j in range(i+1, n):
 			D[i][j] = dist[i][j]
 
 	leafs = [ Node() for _ in range(n)]
@@ -39,16 +39,17 @@ def generateTree(dist, gens_vec):
 			np.argmax(Q_matrix), Q_matrix.shape)
 		newnode = connect(leafs[i], leafs[j])
 		leafs.append(newnode)
-
+		
 		for m in range(k):
 			D[m][k] = 0.5*(
 				 max(D[i][m], D[m][i]) +\
 				 max(D[j][m], D[m][j])  -\
 				 max(D[i][j], D[j][i]))
 			D[k][m] = 0
-		
-		newnode.weightleft 	= D[i][k]
-		newnode.weightright = D[j][k]
+		# D[i][k] = D[i][j] - 
+		newnode.weightleft 	= 1 #D[i][k]
+		newnode.weightright = 1 #D[j][k]
+		# print(newnode.weightleft, newnode.weightright)
 		k += 1
 
 	return newnode
@@ -64,9 +65,11 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 	
-	dist = np.random.random( (12,12) ) 
+	# dist = np.random.random( (40,40) )
+	# gens_vec = np.int64(np.random.randint(2, size=(40,100)))
+	# print(gens_vec)
 	dist, gens_vec = matrixgen()
-	# dist, gens_vec = dist[, :40], gens_vec[:40]
+	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
