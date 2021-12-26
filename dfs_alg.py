@@ -1,8 +1,16 @@
 import numpy as np
 
-from Node import Node
+from Node import Node, GENS
 
-HEIGHT = 10
+HEIGHT = 2
+
+def _where(changed):
+    ret = []
+    for i in range(changed.shape[0]):
+        for j in range(changed.shape[1]):
+            if changed[i][j] == 0:
+                ret.append((i,j))           
+    return ret
 
 def trigger(node: Node):
     if (node is None) or (node.parent is None):
@@ -11,11 +19,12 @@ def trigger(node: Node):
         prev    = np.outer(node.parent.gens, node.parent.gens).astype(np.int) 
         current = np.outer(node.gens, node.gens).astype(np.int)
         changed = prev & (~current)
-        return np.where(changed == 0)
+        return _where(changed)
 
 def dfs_limit_height(node: Node, height = HEIGHT ):
     if node is None or height < 0:
         if node is not None:
+            print("hhhi")
             return [ np.outer(node.gens, node.gens)  ]
         else:
             return []
@@ -28,18 +37,19 @@ def dfs_limit_height(node: Node, height = HEIGHT ):
 def dfs_estimate(node: Node, prob):
     if node is None:
         return
-        
+
     triggers = trigger(node)
     
     # triggerd was invoked
-    if len(triggers) == 0:
+    if len(triggers) != 0:
         matrices = dfs_limit_height(node)
         for (i,j) in triggers:
             tempij = 0    
             for matrix in matrices:
-                if matrix[i,j] == 0:
+                if matrix[i][j] == 0:
                     tempij += 1
-            prob[i,j].append(tempij / len(matrices))
+            tempij = tempij / len(matrices) if len(matrices) != 0 else 0
+            prob[i][j].append(tempij)
 
     dfs_estimate( node.left, prob )
     dfs_estimate( node.right, prob )

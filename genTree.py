@@ -51,10 +51,8 @@ def generateTree(dist, gens_vec):
 		newnode.weightleft = D[j][k]
 		k += 1
 
-	print(newnode)
 	return newnode
 	
-
 from plots import pltTree
 from up_down import up_down, up_down_down_stage
 def test():
@@ -78,13 +76,11 @@ def test():
 	up_down(newnode)
 	up_down_down_stage(newnode)
 
-	print(newnode.gens)
 
 	prob = [[ [] for i in range( len(newnode.gens) )]\
 		 for j in range( len(newnode.gens) ) ]
 
 	dfs_estimate(newnode, prob)
-
 	# temporary
 	meanprob = np.zeros( shape=(len(newnode.gens), len(newnode.gens)) )
 	for i in range( len(newnode.gens) ):
@@ -92,7 +88,8 @@ def test():
 			meanprob[i][j] = sum(prob[i][j]) /\
 				 len(prob[i][j]) if len(prob[i][j]) != 0 else 0
 
-
+	
+	print(np.max(meanprob))
 
 	# print(prob)
 	# def dfs(_newnode, _str):
