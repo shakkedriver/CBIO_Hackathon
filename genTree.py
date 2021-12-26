@@ -65,6 +65,8 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
+	
+	dist = np.random.random( (12,12) ) 
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
@@ -73,7 +75,7 @@ def test():
 
 	from plots import pltTree
 	pltTree(newnode)
-	
+
 	def dfs(_newnode, _str):
 		if _newnode is None:
 			return
