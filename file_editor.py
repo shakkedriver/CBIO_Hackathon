@@ -56,8 +56,8 @@ def main():
     for key in an.keys():
         animal_translate[key] = counter
         counter +=1
-    mat = from_df_to_matrix(DF, an, animal_translate)
-    return mat
+    mat, gens_vec = from_df_to_matrix(DF, an, animal_translate)
+    return mat, gens_vec
     print('hi')
 
 
@@ -73,14 +73,15 @@ def from_df_to_matrix(df, an, animal_translate):
             animals_df.at[animal_translate[curr_animal],cog] = 1
 
     distance_matrix = np.zeros((num_of_species, num_of_species))
+    gens_vec = []
     for row in range(num_of_species):
+        vec1 = animals_df.iloc[row]
         for col in range(num_of_species):
-            vec1 = animals_df.iloc[row]
             vec2 =animals_df.iloc[col]
             tal = distance_func(np.array(vec1), np.array(vec2))
             distance_matrix[row,col] = tal
-
-    return distance_matrix
+        gens_vec.append( vec1)
+    return distance_matrix, gens_vec
 
 
 

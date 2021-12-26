@@ -9,7 +9,7 @@ def connect(left, right):
 	left.parent, right.parent = newnode, newnode
 	return newnode
 
-def generateTree(dist):
+def generateTree(dist, gens_vec):
 	
 	n = dist.shape[0]
 
@@ -21,6 +21,8 @@ def generateTree(dist):
 			D[i][j] = dist[i][j]
 
 	leafs = [ Node() for _ in range(n)]
+	for _ in range(n):
+		leafs[_].gens = gens_vec[_]
 	
 	def buildQ_matrixR_matrix(dim):
 		r_matrix = np.sum(D, axis=0) / (n-2) 
@@ -28,7 +30,6 @@ def generateTree(dist):
 		for i in range(dim):
 			for j in range(i+1, dim):
 				Q_matrix[i][j] = r_matrix[i] + r_matrix[j] - D[i][j] 
-		# print(Q_matrix)
 		return Q_matrix, r_matrix
 	
 	newnode = None
@@ -36,14 +37,9 @@ def generateTree(dist):
 		Q_matrix, r_matrix = buildQ_matrixR_matrix(k)
 		i,j = np.unravel_index(
 			np.argmax(Q_matrix), Q_matrix.shape)
-		# print(i,j)
 		newnode = connect(leafs[i], leafs[j])
-		
-		
-		# leafs.pop(i)
-		# leafs.pop(j)
 		leafs.append(newnode)
-		
+
 		for m in range(k):
 			D[m][k] = 0.5*(
 				 max(D[i][m], D[m][i]) +\
@@ -59,6 +55,8 @@ def generateTree(dist):
 	return newnode
 	
 
+from plots import pltTree
+from up_down import up_down, up_down_down_stage
 def test():
 	dist = np.array([
 		[1 , 2 ,3, 2, 2, 9],
@@ -69,30 +67,41 @@ def test():
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 	
 	dist = np.random.random( (12,12) ) 
-	dist = matrixgen()
+	dist, gens_vec = matrixgen()
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
 			dist[j][i] = 0
-	newnode = generateTree(dist)
+	newnode = generateTree(dist, gens_vec)
 
-	from plots import pltTree
-	# pltTree(newnode)
+	pltTree(newnode)
+	up_down(newnode)
+	up_down_down_stage(newnode)
 
-	prob = [[[] for i in range(n)]\
-		 for j in range(n) ]
+	print(newnode.gens)
+
+	prob = [[ [] for i in range( len(newnode.gens) )]\
+		 for j in range( len(newnode.gens) ) ]
 
 	dfs_estimate(newnode, prob)
-	print(prob)
 
-	def dfs(_newnode, _str):
-		if _newnode is None:
-			return
-		dfs(_newnode.left, _str + " ")
-		print(_str + "hi")
-		dfs(_newnode.right, _str + " ")
-		# print(Q_matrix)
-	dfs(newnode, "")
+	# temporary
+	meanprob = np.zeros( shape=(len(newnode.gens), len(newnode.gens)) )
+	for i in range( len(newnode.gens) ):
+		for j in range( len(newnode.gens) ):
+			meanprob[i][j] = sum(prob[i][j]) /\
+				 len(prob[i][j]) if len(prob[i][j]) != 0 else 0
+
+
+
+	# print(prob)
+	# def dfs(_newnode, _str):
+	# 	if _newnode is None:
+	# 		return
+	# 	dfs(_newnode.left, _str + " ")
+	# 	print(_str + "hi")
+	# 	dfs(_newnode.right, _str + " ")
+	# dfs(newnode, "")
 
 if __name__ == "__main__":
 	test()
