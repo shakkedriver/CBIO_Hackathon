@@ -20,24 +20,30 @@ def generateTree(dist):
 
 	leafs = [ Node() for _ in range(n)]
 	
-	r_matrix = np.sum(dist, axis=0) / (n-2) 
-	print(r_matrix)
-	Q_matrix = np.zeros((n,n))
-	for i, ri in enumerate(r_matrix):
-		for j, rj in enumerate(r_matrix):
-			Q_matrix[i][j] = ri + rj - dist[i][j] 
+	def buildQ_matrixR_matrix(dim):
+		r_matrix = np.sum(D, axis=0) / (n-2) 
+		Q_matrix = np.zeros((dim,dim))
+		for i in range(dim):
+			for j in range(dim):
+				Q_matrix[i][j] = r_matrix[i] + r_matrix[j] - D[i][j] 
+		return Q_matrix, r_matrix
 	
-	i,j = np.unravel_index(
-		np.argmax(Q_matrix), Q_matrix.shape)
-	
-	newnode = connect(leafs[i], leafs[j])
-	for j, rj in enumerate(r_matrix):
-		Q_matrix[i][j] = ri + rj - dist[i][j] 
+	newnode = None
+	for _ in range(n):
+		Q_matrix, r_matrix = buildQ_matrixR_matrix(k)
+		i,j = np.unravel_index(
+			np.argmax(Q_matrix), Q_matrix.shape)
+		newnode = connect(leafs[i], leafs[j])
+		leafs.append(newnode)
 		
-	leafs.append(  )
-	
+		for m in range(k):
+			D[k][m] = 0.5*(D[i][m] + D[j][m] - D[i][j])  
+		
+		k += 1
 
-
+	print(newnode)
+	# should be the root 
+	return newnode
 	print(i,j)
 
 def test():
