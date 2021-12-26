@@ -1,5 +1,7 @@
 import numpy as np
 from Node import Node
+from file_editor import main as matrixgen
+from dfs_alg import dfs_estimate
 
 def connect(left, right):
 	newnode = Node() 
@@ -67,6 +69,7 @@ def test():
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 	
 	dist = np.random.random( (12,12) ) 
+	dist = matrixgen()
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
@@ -74,7 +77,13 @@ def test():
 	newnode = generateTree(dist)
 
 	from plots import pltTree
-	pltTree(newnode)
+	# pltTree(newnode)
+
+	prob = [[[] for i in range(n)]\
+		 for j in range(n) ]
+
+	dfs_estimate(newnode, prob)
+	print(prob)
 
 	def dfs(_newnode, _str):
 		if _newnode is None:

@@ -57,6 +57,7 @@ def main():
         animal_translate[key] = counter
         counter +=1
     mat = from_df_to_matrix(DF, an, animal_translate)
+    return mat
     print('hi')
 
 

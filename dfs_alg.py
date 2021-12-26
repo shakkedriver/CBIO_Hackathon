@@ -2,6 +2,49 @@ import numpy as np
 
 from Node import Node
 
+HEIGHT = 10
+
+def trigger(node: Node):
+    if (node is None) or (node.parent is None):
+        return []  
+    else:
+        prev    = np.outer(node.parent.gens, node.parent.gens).astype(np.int) 
+        current = np.outer(node.gens, node.gens).astype(np.int)
+        changed = prev & (~current)
+        return np.where(changed == 0)
+
+def dfs_limit_height(node: Node, height = HEIGHT ):
+    if node is None or height < 0:
+        if node is not None:
+            return [ np.outer(node.gens, node.gens)  ]
+        else:
+            return []
+    else:
+        ret = []
+        ret += dfs_limit_height(node.left, height-node.weightleft) 
+        ret += dfs_limit_height(node.right, height-node.weightright)
+        return ret
+
+def dfs_estimate(node: Node, prob):
+    if node is None:
+        return
+        
+    triggers = trigger(node)
+    
+    # triggerd was invoked
+    if len(triggers) == 0:
+        matrices = dfs_limit_height(node)
+        for (i,j) in triggers:
+            tempij = 0    
+            for matrix in matrices:
+                if matrix[i,j] == 0:
+                    tempij += 1
+            prob[i,j].append(tempij / len(matrices))
+
+    dfs_estimate( node.left, prob )
+    dfs_estimate( node.right, prob )
+
+
 
 def dfs_alg(root: Node, node: Node, twod_hist):
     """
@@ -19,6 +62,7 @@ def dfs_alg(root: Node, node: Node, twod_hist):
         dfs_alg(root, node.left, twod_hist)
         dfs_alg(root, node.right, twod_hist)
         return
+
     # this would be run for each node
     # indexes with value lower than one means the parent had the gean but the node dose not
     node.change = node.gens - node.parent.gens
