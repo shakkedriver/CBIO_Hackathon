@@ -3,6 +3,8 @@ import numpy as np
 
 #TODO parse just the erocarioties
 
+
+
 def make_smaller_file(path):
     new_file = open('new_input.txt', 'w')
     new_file.write('##species_taxonomy_id	orthgroup_id	count\n')
