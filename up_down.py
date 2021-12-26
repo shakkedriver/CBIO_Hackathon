@@ -42,7 +42,7 @@ def up_down(node):
 		for assignment in [0,1]:
 			for assleft, assright in [ (0,0), (0,1), (1,1), (1,0)]:
 				node.gensprob[:, assignment] +=   \
-					FLIP[ (assignment, assleft, assright) ] *\
+					FLIP[ (assignment, assleft, assright) ] *node.weightleft*node.weightright*\
 						 node.left.gensprob[:, assleft]*node.right.gensprob[:, assright]
 	return 
 
@@ -52,4 +52,20 @@ def up_down_down_stage(node):
 	node.gens = np.argmax(node.gensprob, axis=1)
 	up_down_down_stage(node.left)
 	up_down_down_stage(node.right)
+
+def diff(node):
+	if isleaf(node):
+		return
+	cc = 0
+	for i in range(len(node.left.gens)):
+		if node.left.gens[i] != node.right.gens[i]:
+			cc = 1
+	if (cc == 1):
+		print("diff")
+	else:
+		print("equl")
+	diff(node.left)
+	diff(node.right)
+
+
 	
