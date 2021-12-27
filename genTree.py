@@ -67,10 +67,10 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 
-	# dist = np.random.random( (100,100) )
-	# gens_vec = np.int64(np.random.randint(2, size=(100,GENS)))
+	dist = np.random.random( (300,300) )
+	gens_vec = np.int64(np.random.randint(2, size=(300,GENS)))
 	# print(gens_vec)
-	dist, gens_vec = matrixgen()
+	# dist, gens_vec = matrixgen()
 	print("hi")
 	# dist, gens_vec = dist[:100, :40], gens_vec[:40]
 	n = dist.shape[0]
