@@ -3,7 +3,7 @@ import numpy as np
 import random
 #TODO parse just the erocarioties
 
-
+import os
 
 # def make_smaller_file(path):
 #     new_file = open('new_input.txt', 'w')
@@ -93,6 +93,7 @@ def main():
     mat, gens_vec = from_df_to_matrix(DF, an, animal_translate)
     return mat, gens_vec
 
+
 def from_df_to_matrix(df, an, animal_translate):
 
     num_of_species = len(df.animal.unique())
@@ -121,6 +122,15 @@ def distance_func(vec1, vec2):
     tal = np.where((vec1==1) & (vec2==1),1,0)
     return sum(tal)
 
+#
+# if __name__ == '__main__':
+#     main()
+#     # tal = 'mpwrmv\n'
+#     # tal = tal.replace('\n', '')
+#     # print(tal)
+#     arr = [1, 4, 4, 6, 8, 9, 8]
+#     arr = list(set(arr))
+#     print('hi')
 
 
 if __name__ == '__main__':
