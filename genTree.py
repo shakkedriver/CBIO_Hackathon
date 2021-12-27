@@ -1,10 +1,16 @@
 
 from plots import pltTree, plot_groups
 from up_down import up_down, up_down_down_stage, up_down_assignment, diff
+from plots import pltTree
+from up_down import up_down, up_down_down_stage, diff, tree_to_arr, create_table
 import numpy as np
 from Node import Node, GENS
 from file_editor import main as matrixgen
 from dfs_alg import dfs_estimate
+import matplotlib.pyplot as plt
+from operator import itemgetter
+
+
 
 def connect(left, right):
 	newnode = Node()
@@ -25,7 +31,7 @@ def generateTree(dist, gens_vec):
 
 	leafs = [ Node() for _ in range(n)]
 	for _ in range(n):
-		leafs[_].gens = gens_vec[_][:GENS]
+		leafs[_].gens = gens_vec[_]
 
 	def buildQ_matrixR_matrix(dim):
 		r_matrix = np.sum(D, axis=0) / (n-2)
@@ -49,15 +55,17 @@ def generateTree(dist, gens_vec):
 					max(D[j][m], D[m][j])  - \
 					max(D[i][j], D[j][i]))
 			D[k][m] = 0
-		
+
 		newnode.weightleft 	= 1 
 		newnode.weightright = 1 
 		
+
 		k += 1
 
 	return newnode
 
-import pickle
+
+
 def test():
 	dist = np.array([
 		[1 , 2 ,3, 2, 2, 9],
@@ -67,37 +75,24 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 
-	# dist = np.random.random( (100,100) )
-	# gens_vec = np.int64(np.random.randint(2, size=(100,GENS)))
+	# dist = np.random.random( (40,40) )
+	# gens_vec = np.int64(np.random.randint(2, size=(40,100)))
 	# print(gens_vec)
 	dist, gens_vec = matrixgen()
-	print("hi")
-	# dist, gens_vec = dist[:100, :40], gens_vec[:40]
+	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
 			dist[j][i] = 0
-
-	# print(gens_vec[0])
-	# exit(0)
 	newnode = generateTree(dist, gens_vec)
-	pltTree(newnode)
-	import matplotlib.pyplot as plt
-	plt.savefig("./svg/NJtree.svg")
-	plt.clf()
+
 	up_down(newnode)
 	up_down_down_stage(newnode)
-	up_down_assignment(newnode)
-	# diff(newnode)
+	diff(newnode)
 
 	prob = [[ [] for i in range( len(newnode.gens) )]\
 		 for j in range( len(newnode.gens) ) ]
 
-	with open('node.pickle', 'wb') as f:
-		# Pickle the 'data' dictionary using the highest protocol available.
-		pickle.dump(newnode, f)
-
-	# plt.hist(corlated)
 	dfs_estimate(newnode, prob)
 	# temporary
 	meanprob = np.zeros( shape=(len(newnode.gens), len(newnode.gens)) )
@@ -108,21 +103,14 @@ def test():
 
 	import matplotlib.pyplot as plt
 	plt.imshow(meanprob)
-	plt.savefig("./svg/Heatmap.svg")
-	plt.clf()
+	plt.show()
 
 	from t import get_two_groups
-	corlated, uncoralted = get_two_groups(meanprob, 0.1)#corlated
-	plot_groups(corlated, meanprob)
-	plt.savefig("./svg/corlated.svg")
-	plt.clf()
-	plot_groups(uncoralted, meanprob)
-	plt.savefig("./svg/uncoralted.svg")
-	plt.clf()
-	# corlated, uncoralted = get_two_groups(meanprob, 0.5)
-
-
-	# plt.show()
+	corlated, uncoralted = get_two_groups(meanprob, 0.5)#corlated
+	print(corlated)
+	corlated, uncoralted = get_two_groups(meanprob, 0.5)
+	plt.hist(corlated)
+	plt.show()
 
 	# print(meanprob)
 	# print(prob)
