@@ -125,7 +125,7 @@ def distance_func(vec1, vec2):
 def data_permutation_bonus(pre_abs_matrix):
     prev_mat = pre_abs_matrix.copy()
 
-    for i in tqdm.tqdm(range(10**4)):
+    for i in tqdm.tqdm(range(10**6)):
         ret_mat, flag = find_circle_and_replace(prev_mat)
         if flag:
             prev_mat = ret_mat
