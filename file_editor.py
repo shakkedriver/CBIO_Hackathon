@@ -47,7 +47,7 @@ def dic_random_input_file(an, iteration):
     new_file.write('##species_taxonomy_id	orthgroup_id	count\n')
     for animal in chosen_animals:
         for cog in an[animal].keys():
-            new_file.write(animal+" "+cog+" "+an[animal][cog]+'\n')
+            new_file.write(animal+"\t"+cog+"\t"+an[animal][cog]+'\n')
     new_file.close()
 
 def make_k_random_files(k):
@@ -83,7 +83,7 @@ def make_DF(animals, seq):
 
 def main():
     # make_smaller_file('species.mappings.v11.5.txt')
-    animals, seq, an = txt_to_data('new_input.txt')
+    animals, seq, an = txt_to_data('new_input1.txt')
     DF = make_DF(animals, seq)
     animal_translate = {}
     counter = 0
@@ -92,8 +92,6 @@ def main():
         counter +=1
     mat, gens_vec = from_df_to_matrix(DF, an, animal_translate)
     return mat, gens_vec
-
-
 
 def from_df_to_matrix(df, an, animal_translate):
 
