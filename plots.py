@@ -20,4 +20,12 @@ def pltTree(root):
 	plt.scatter(retx, rety, s=2, color='black')
 	plt.plot(retx, rety, linewidth=0.5 )
 	plt.title('NJ Tree')
-	plt.show()
+
+
+
+def plot_groups(group, matrix):
+	f = [ ]
+	for (i,j) in group:
+		f.append(matrix[i,j])
+	plt.hist(f)
+	

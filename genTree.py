@@ -1,7 +1,8 @@
-from plots import pltTree
+
+from plots import pltTree, plot_groups
 from up_down import up_down, up_down_down_stage, diff
 import numpy as np
-from Node import Node
+from Node import Node, GENS
 from file_editor import main as matrixgen
 from dfs_alg import dfs_estimate
 
@@ -66,10 +67,10 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 
-	# dist = np.random.random( (40,40) )
-	# gens_vec = np.int64(np.random.randint(2, size=(40,100)))
+	dist = np.random.random( (100,100) )
+	gens_vec = np.int64(np.random.randint(2, size=(100,GENS)))
 	# print(gens_vec)
-	dist, gens_vec = matrixgen()
+	# dist, gens_vec = matrixgen()
 	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
@@ -79,7 +80,10 @@ def test():
 	# print(gens_vec[0])
 	# exit(0)
 	newnode = generateTree(dist, gens_vec)
-
+	pltTree(newnode)
+	import matplotlib.pyplot as plt
+	plt.savefig("./svg/NJtree.svg")
+	plt.clf()
 	up_down(newnode)
 	up_down_down_stage(newnode)
 	# diff(newnode)
@@ -90,7 +94,7 @@ def test():
 	with open('node.pickle', 'wb') as f:
 		# Pickle the 'data' dictionary using the highest protocol available.
 		pickle.dump(newnode, f)
-		
+
 	# plt.hist(corlated)
 	dfs_estimate(newnode, prob)
 	# temporary
@@ -102,12 +106,18 @@ def test():
 
 	import matplotlib.pyplot as plt
 	plt.imshow(meanprob)
-	plt.show()
+	plt.savefig("./svg/Heatmap.svg")
+	plt.clf()
 
 	from t import get_two_groups
-	corlated, uncoralted = get_two_groups(meanprob, 0.5)#corlated
-	print(corlated)
-	corlated, uncoralted = get_two_groups(meanprob, 0.5)
+	corlated, uncoralted = get_two_groups(meanprob, 0.1)#corlated
+	plot_groups(corlated, meanprob)
+	plt.savefig("./svg/corlated.svg")
+	plt.clf()
+	plot_groups(uncoralted, meanprob)
+	plt.savefig("./svg/uncoralted.svg")
+	plt.clf()
+	# corlated, uncoralted = get_two_groups(meanprob, 0.5)
 
 
 	# plt.show()
