@@ -2,15 +2,22 @@ import numpy as np
 from Node import GENS
 
 FLIP =  {
-	(0,0,0) : 0.60,
+	(0,0,0) : 0.90,
 	(1,0,0) : 0.10,
-	(0,1,0) : 0.15,
-	(0,0,1) : 0.15,
+	(0,1,0) : 0.04,
+	(0,0,1) : 0.04,
 	(1,1,0) : 0.15,
-	(0,1,1) : 0.10,
+	(0,1,1) : 0.02,
 	(1,0,1) : 0.15,
 	(1,1,1) : 0.60
 } 
+
+FLIPdown = {
+	(0,0) : 0.95,
+	(0,1) : 0.05,
+	(1,1) : 0.8,
+	(1,0) : 0.2
+}
 # MATRIXP = FLIP 
 
 def isleaf(node):
@@ -46,12 +53,40 @@ def up_down(node):
 						 node.left.gensprob[:, assleft]*node.right.gensprob[:, assright]
 	return 
 
+
 def up_down_down_stage(node):
-	if node is None:
+	if (node is None) or isleaf(node):
+		if isleaf(node):
+			node.gensprobdown = node.gensprob	
 		return  
-	node.gens = np.argmax(node.gensprob, axis=1)
+
+	if node.parent != None:
+		for assignment in [0,1]:
+			for assparent in [ 0,1]:
+				node.gensprobdown[:, assignment] +=\
+					  FLIPdown[assparent, assignment] *\
+					 node.parent.gensprobdown[:, assparent]
+	else:
+		node.gens = np.argmax(node.gensprob, axis=1)
+		for j in range(GENS):
+			for assignment in [0,1]:
+				node.gensprobdown[j][assignment] = 1\
+						if assignment == node.gens[j] else 0  
+
+	# print(node.gensprobdown)
+		
+	# node.gens = np.argmax(node.gensprob * node.gensprobdown , axis=1)
 	up_down_down_stage(node.left)
 	up_down_down_stage(node.right)
+
+def up_down_assignment(node):
+	if (node is None) or isleaf(node) :
+		return  
+	# print(node.gensprob * node.gensprobdown)
+	node.gens = np.argmax(node.gensprob * node.gensprobdown , axis=1)
+	print(node.gens)
+	up_down_assignment(node.left)
+	up_down_assignment(node.right)
 
 def diff(node):
 	if isleaf(node):

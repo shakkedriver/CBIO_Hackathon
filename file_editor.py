@@ -83,7 +83,7 @@ def make_DF(animals, seq):
 
 def main():
     # make_smaller_file('species.mappings.v11.5.txt')
-    animals, seq, an = txt_to_data('new_input1.txt')
+    animals, seq, an = txt_to_data('new_input.txt')
     DF = make_DF(animals, seq)
     animal_translate = {}
     counter = 0

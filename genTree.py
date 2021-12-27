@@ -1,6 +1,6 @@
 
 from plots import pltTree, plot_groups
-from up_down import up_down, up_down_down_stage, diff
+from up_down import up_down, up_down_down_stage, up_down_assignment, diff
 import numpy as np
 from Node import Node, GENS
 from file_editor import main as matrixgen
@@ -25,7 +25,7 @@ def generateTree(dist, gens_vec):
 
 	leafs = [ Node() for _ in range(n)]
 	for _ in range(n):
-		leafs[_].gens = gens_vec[_]
+		leafs[_].gens = gens_vec[_][:GENS]
 
 	def buildQ_matrixR_matrix(dim):
 		r_matrix = np.sum(D, axis=0) / (n-2)
@@ -67,11 +67,12 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 
-	dist = np.random.random( (100,100) )
-	gens_vec = np.int64(np.random.randint(2, size=(100,GENS)))
+	# dist = np.random.random( (100,100) )
+	# gens_vec = np.int64(np.random.randint(2, size=(100,GENS)))
 	# print(gens_vec)
 	dist, gens_vec = matrixgen()
-	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
+	print("hi")
+	# dist, gens_vec = dist[:100, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
@@ -86,6 +87,7 @@ def test():
 	plt.clf()
 	up_down(newnode)
 	up_down_down_stage(newnode)
+	up_down_assignment(newnode)
 	# diff(newnode)
 
 	prob = [[ [] for i in range( len(newnode.gens) )]\
