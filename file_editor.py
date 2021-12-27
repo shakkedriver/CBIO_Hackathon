@@ -91,6 +91,29 @@ def main():
         animal_translate[key] = counter
         counter +=1
     mat, gens_vec = from_df_to_matrix(DF, an, animal_translate)
+    
+    
+# code for permutation of new_input1.txt
+# organisems_mat = animals_df.to_numpy()
+# num_of_species = organisems_mat.shape[0]
+# permutation_mat = data_permutation_bonus(organisems_mat)
+# permutation_df = pd.DataFrame(data=permutation_mat,
+#                               columns=animals_df.columns)
+# 
+# distance_matrix1 = np.zeros((num_of_species, num_of_species))
+# gens_vec1 = []
+# 
+# for row in range(num_of_species):
+#     vec1 = permutation_df.iloc[row]
+#     for col in range(num_of_species):
+#         vec2 = permutation_df.iloc[col]
+#         score = distance_func(np.array(vec1), np.array(vec2))
+#         distance_matrix1[row, col] = score
+#     gens_vec1.append(vec1)
+# 
+# return distance_matrix1, gens_vec1
+    
+    
     return mat, gens_vec
 
 
@@ -122,23 +145,68 @@ def distance_func(vec1, vec2):
     tal = np.where((vec1==1) & (vec2==1),1,0)
     return sum(tal)
 
-#
-# if __name__ == '__main__':
-#     main()
-#     # tal = 'mpwrmv\n'
-#     # tal = tal.replace('\n', '')
-#     # print(tal)
-#     arr = [1, 4, 4, 6, 8, 9, 8]
-#     arr = list(set(arr))
-#     print('hi')
+def data_permutation_bonus(pre_abs_matrix):
+    prev_mat = pre_abs_matrix.copy()
+
+    for i in tqdm.tqdm(range(10**6)):
+        ret_mat, flag = find_circle_and_replace(prev_mat)
+        if flag:
+            prev_mat = ret_mat
+
+    return prev_mat
+
+def find_circle_and_replace(prev_matrix):
+    new_matrix = prev_matrix.copy()
+    num_rows = prev_matrix.shape[0]
+    num_cols = prev_matrix.shape[1]
+    row_p_1 = random.randint(0, num_rows-1)
+    col_p_1 = random.randint(0, num_cols-1)
+
+    row_p_2 = random.randint(0, num_rows-1)
+    col_p_2 = random.randint(0, num_cols-1)
+
+    counter = 0
+    while((row_p_1 == row_p_2) and (counter < 10)):
+        row_p_2 = random.randint(0, num_rows-1)
+        counter = counter + 1
+
+    if row_p_1 == row_p_2:
+        return (np.empty((1,1)),False)
+
+    counter2 = 0
+    counter2_flag = True
+    while((col_p_1 == col_p_2) or (prev_matrix[row_p_1, col_p_1] != prev_matrix[row_p_2, col_p_2])):
+        if counter2 >= 10:
+            counter2_flag = False
+            break
+
+        col_p_2 = random.randint(0, num_cols-1)
+        counter2 = counter2 + 1
+
+    if not counter2_flag:
+       return (np.empty((1, 1)), False)
+
+    # here we know we have two edges to the circle
+    circle_x = [row_p_1, col_p_1]
+    circle_y = [row_p_2, col_p_2]
+
+    circle_z = [row_p_1, col_p_2]
+    circle_w = [row_p_2, col_p_1]
+
+    if (prev_matrix[circle_z[0], circle_z[1]] == prev_matrix[circle_w[0], circle_w[1]]) and\
+            (prev_matrix[circle_z[0], circle_z[1]] != (prev_matrix[circle_x[0], circle_x[1]])):
+            # found good circle
+            # 1 become 0, 0 become 1
+            new_matrix[circle_x[0], circle_x[1]] = 1 - prev_matrix[circle_x[0], circle_x[1]]
+            new_matrix[circle_y[0], circle_y[1]] = 1 - prev_matrix[circle_y[0], circle_y[1]]
+
+            new_matrix[circle_z[0], circle_z[1]] = 1 - prev_matrix[circle_z[0], circle_z[1]]
+            new_matrix[circle_w[0], circle_w[1]] = 1 - prev_matrix[circle_w[0], circle_w[1]]
+            return (new_matrix, True)
+
+    return (np.empty((1, 1)), False)
+
 
 
 if __name__ == '__main__':
     main()
-    # main2()
-    # tal = 'mpwrmv\n'
-    # tal = tal.replace('\n', '')
-    # print(tal)
-    # arr = [1, 4, 4, 6, 8, 9, 8]
-    # arr = list(set(arr))
-    # print('hi')
