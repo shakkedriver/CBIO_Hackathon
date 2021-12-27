@@ -56,8 +56,7 @@ def generateTree(dist, gens_vec):
 
 	return newnode
 
-
-
+import pickle
 def test():
 	dist = np.array([
 		[1 , 2 ,3, 2, 2, 9],
@@ -71,7 +70,7 @@ def test():
 	# gens_vec = np.int64(np.random.randint(2, size=(40,100)))
 	# print(gens_vec)
 	dist, gens_vec = matrixgen()
-	dist, gens_vec = dist[:40, :40], gens_vec[:40]
+	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
@@ -88,6 +87,11 @@ def test():
 	prob = [[ [] for i in range( len(newnode.gens) )]\
 		 for j in range( len(newnode.gens) ) ]
 
+	with open('node.pickle', 'wb') as f:
+		# Pickle the 'data' dictionary using the highest protocol available.
+		pickle.dump(newnode, f)
+		
+	# plt.hist(corlated)
 	dfs_estimate(newnode, prob)
 	# temporary
 	meanprob = np.zeros( shape=(len(newnode.gens), len(newnode.gens)) )
@@ -102,8 +106,9 @@ def test():
 
 	from t import get_two_groups
 	corlated, uncoralted = get_two_groups(meanprob, 0.5)
-	plt.hist(corlated)
-	plt.show()
+
+
+	# plt.show()
 
 	# print(meanprob)
 	# print(prob)
