@@ -8,10 +8,10 @@ def hit_map(mat):
 
 def get_two_groups(mat, threshold):
     corlated = np.where(mat>=threshold)
-    corlated = [(i,j) for i,j in zip(corlated[0],corlated[1])]
+    corlated = list(zip(corlated[0],corlated[1]))
     uncoralted = np.where(mat<threshold)
-    uncorlated = [(i, j) for i, j in zip(uncoralted[0], uncoralted[1])]
-    uncoralted = [a for a in uncorlated if a[0] > a[1]]
+    uncoralted = list(zip(uncoralted[0], uncoralted[1]))
+    # uncoralted = [a for a in uncorlated if a[0] > a[1]]
     return corlated,uncoralted
 
 

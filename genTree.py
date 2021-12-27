@@ -70,7 +70,7 @@ def test():
 	dist = np.random.random( (100,100) )
 	gens_vec = np.int64(np.random.randint(2, size=(100,GENS)))
 	# print(gens_vec)
-	# dist, gens_vec = matrixgen()
+	dist, gens_vec = matrixgen()
 	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
