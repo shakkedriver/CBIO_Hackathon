@@ -42,7 +42,7 @@ def all_animal_dic(path):
 
 def dic_random_input_file(an, iteration):
     animalslist = list(an.keys())
-    chosen_animals = random.sample(animalslist,100)
+    chosen_animals = random.sample(animalslist,400)
     new_file = open('new_input'+str(iteration)+'.txt', 'w')
     new_file.write('##species_taxonomy_id	orthgroup_id	count\n')
     for animal in chosen_animals:
