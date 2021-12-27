@@ -91,6 +91,29 @@ def main():
         animal_translate[key] = counter
         counter +=1
     mat, gens_vec = from_df_to_matrix(DF, an, animal_translate)
+    
+    
+# code for permutation of new_input1.txt
+# organisems_mat = animals_df.to_numpy()
+# num_of_species = organisems_mat.shape[0]
+# permutation_mat = data_permutation_bonus(organisems_mat)
+# permutation_df = pd.DataFrame(data=permutation_mat,
+#                               columns=animals_df.columns)
+# 
+# distance_matrix1 = np.zeros((num_of_species, num_of_species))
+# gens_vec1 = []
+# 
+# for row in range(num_of_species):
+#     vec1 = permutation_df.iloc[row]
+#     for col in range(num_of_species):
+#         vec2 = permutation_df.iloc[col]
+#         score = distance_func(np.array(vec1), np.array(vec2))
+#         distance_matrix1[row, col] = score
+#     gens_vec1.append(vec1)
+# 
+# return distance_matrix1, gens_vec1
+    
+    
     return mat, gens_vec
 
 
