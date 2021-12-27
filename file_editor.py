@@ -1,32 +1,64 @@
 import pandas as pd
 import numpy as np
-
+import random
 #TODO parse just the erocarioties
 
 
 
-def make_smaller_file(path):
-    new_file = open('new_input.txt', 'w')
-    new_file.write('##species_taxonomy_id	orthgroup_id	count\n')
+# def make_smaller_file(path):
+#     new_file = open('new_input.txt', 'w')
+#     new_file.write('##species_taxonomy_id	orthgroup_id	count\n')
+#
+#     lines = []
+#     an = {}
+#     counter = 0
+#     with open(path) as f:
+#         lines = f.readlines()[1:]
+#         for line in lines:
+#             splited = line.split('\t')
+#             ammount = splited[2][:-2]
+#             if ammount >= '10':
+#                 new_file.write(line)
+#                 if splited[0] not in an:
+#                     an[splited[0]] = 1
+#                     counter+=1
+#                 else:
+#                     an[splited[0]] += 1
+#             if counter == 100:
+#                 break
 
+def all_animal_dic(path):
     lines = []
     an = {}
-    counter = 0
     with open(path) as f:
         lines = f.readlines()[1:]
         for line in lines:
             splited = line.split('\t')
-            ammount = splited[2][:-2]
-            if ammount >= '10':
-                new_file.write(line)
-                if splited[0] not in an:
-                    an[splited[0]] = 1
-                    counter+=1
-                else:
-                    an[splited[0]] += 1
-            if counter == 100:
-                break
+            if splited[0] not in an:
+                an[splited[0]] = {splited[1]:splited[2].replace('\n', '')}
+            else:
+                an[splited[0]][splited[1]] = splited[2].replace('\n', '')
+        return an
 
+def dic_random_input_file(an, iteration):
+    animalslist = list(an.keys())
+    chosen_animals = random.sample(animalslist,100)
+    new_file = open('new_input'+str(iteration)+'.txt', 'w')
+    new_file.write('##species_taxonomy_id	orthgroup_id	count\n')
+    for animal in chosen_animals:
+        for cog in an[animal].keys():
+            new_file.write(animal+" "+cog+" "+an[animal][cog]+'\n')
+    new_file.close()
+
+def make_k_random_files(k):
+    an = all_animal_dic('species.mappings.v11.5.txt')
+    index_file = 1
+    while index_file <= k:
+        dic_random_input_file(an, index_file)
+        index_file+=1
+
+def main2():
+    make_k_random_files(5)
 
 def txt_to_data(path):
     lines = []
@@ -60,7 +92,7 @@ def main():
         counter +=1
     mat, gens_vec = from_df_to_matrix(DF, an, animal_translate)
     return mat, gens_vec
-    print('hi')
+
 
 
 def from_df_to_matrix(df, an, animal_translate):
@@ -92,11 +124,13 @@ def distance_func(vec1, vec2):
     return sum(tal)
 
 
+
 if __name__ == '__main__':
     main()
+    # main2()
     # tal = 'mpwrmv\n'
     # tal = tal.replace('\n', '')
     # print(tal)
-    arr = [1, 4, 4, 6, 8, 9, 8]
-    arr = list(set(arr))
-    print('hi')
+    # arr = [1, 4, 4, 6, 8, 9, 8]
+    # arr = list(set(arr))
+    # print('hi')
