@@ -105,6 +105,8 @@ def test():
 	plt.show()
 
 	from t import get_two_groups
+	corlated, uncoralted = get_two_groups(meanprob, 0.5)#corlated
+	print(corlated)
 	corlated, uncoralted = get_two_groups(meanprob, 0.5)
 
 
