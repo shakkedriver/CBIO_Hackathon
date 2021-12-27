@@ -1,8 +1,7 @@
 
 from plots import pltTree, plot_groups
-from up_down import up_down, up_down_down_stage, up_down_assignment, diff
+from up_down import up_down, up_down_down_stage, up_down_assignment, tree_to_arr, create_table
 from plots import pltTree
-from up_down import up_down, up_down_down_stage, diff, tree_to_arr, create_table
 import numpy as np
 from Node import Node, GENS
 from file_editor import main as matrixgen
@@ -75,10 +74,10 @@ def test():
 		[1 , 2 ,7, 1, 2, 9],
 		[1 , 2 ,7, 1, 2, 9]], dtype=np.float32)
 
-	dist = np.random.random( (300,300) )
-	gens_vec = np.int64(np.random.randint(2, size=(300,GENS)))
+	# dist = np.random.random( (300,300) )
+	# gens_vec = np.int64(np.random.randint(2, size=(300,GENS)))
 	# print(gens_vec)
-	# dist, gens_vec = matrixgen()
+	dist, gens_vec = matrixgen()
 	print("hi")
 	# dist, gens_vec = dist[:100, :40], gens_vec[:40]
 	n = dist.shape[0]
@@ -89,7 +88,7 @@ def test():
 
 	up_down(newnode)
 	up_down_down_stage(newnode)
-	diff(newnode)
+	# diff(newnode)
 
 	prob = [[ [] for i in range( len(newnode.gens) )]\
 		 for j in range( len(newnode.gens) ) ]

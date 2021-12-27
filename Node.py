@@ -1,6 +1,6 @@
 import numpy as np
 
-GENS = 40
+GENS = 1090
 
 class Node:	
 	def __init__(self):
