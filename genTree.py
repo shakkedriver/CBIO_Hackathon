@@ -48,17 +48,10 @@ def generateTree(dist, gens_vec):
 					max(D[j][m], D[m][j])  - \
 					max(D[i][j], D[j][i]))
 			D[k][m] = 0
-<<<<<<< HEAD
 		
 		newnode.weightleft 	= 1 
 		newnode.weightright = 1 
 		
-=======
-		# D[i][k] = D[i][j] -
-		newnode.weightleft 	= 1 #D[i][k]
-		newnode.weightright = 1 #D[j][k]
-		# print(newnode.weightleft, newnode.weightright)
->>>>>>> 59d3735152745d1356beb43e91787f6aaad0f938
 		k += 1
 
 	return newnode
@@ -78,16 +71,19 @@ def test():
 	# gens_vec = np.int64(np.random.randint(2, size=(40,100)))
 	# print(gens_vec)
 	dist, gens_vec = matrixgen()
-	# dist, gens_vec = dist[:40, :40], gens_vec[:40]
+	dist, gens_vec = dist[:40, :40], gens_vec[:40]
 	n = dist.shape[0]
 	for i in range(n):
 		for j in range(i,n):
 			dist[j][i] = 0
+
+	# print(gens_vec[0])
+	# exit(0)
 	newnode = generateTree(dist, gens_vec)
 
 	up_down(newnode)
 	up_down_down_stage(newnode)
-	diff(newnode)
+	# diff(newnode)
 
 	prob = [[ [] for i in range( len(newnode.gens) )]\
 		 for j in range( len(newnode.gens) ) ]
