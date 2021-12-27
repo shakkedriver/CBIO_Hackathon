@@ -46,10 +46,10 @@ def generateTree(dist, gens_vec):
 				 max(D[j][m], D[m][j])  -\
 				 max(D[i][j], D[j][i]))
 			D[k][m] = 0
-		# D[i][k] = D[i][j] - 
-		newnode.weightleft 	= 1 #D[i][k]
-		newnode.weightright = 1 #D[j][k]
-		# print(newnode.weightleft, newnode.weightright)
+		
+		newnode.weightleft 	= 1 
+		newnode.weightright = 1 
+		
 		k += 1
 
 	return newnode
@@ -95,8 +95,13 @@ def test():
 	import matplotlib.pyplot as plt
 	plt.imshow(meanprob)
 	plt.show()
-	# print(meanprob)
 
+	from t import get_two_groups
+	corlated, uncoralted = get_two_groups(meanprob, 0.5)
+	plt.hist(corlated)
+	plt.show()
+
+	# print(meanprob)
 	# print(prob)
 	# def dfs(_newnode, _str):
 	# 	if _newnode is None:
